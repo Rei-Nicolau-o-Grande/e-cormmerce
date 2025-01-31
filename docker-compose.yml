@@ -1,0 +1,149 @@
+services:
+
+  service_discovery:
+    build: ./service-discovery
+    hostname: host-service-discovery
+    container_name: container_service_discovery
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+    networks:
+      - rede_ecormmerce
+
+  api_gateway:
+    build: ./api-gateway
+    hostname: host_api_gateway
+    container_name: container_api_gateway
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: "true"
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_LOWER_CASE_SERVICE_ID: "true"
+    networks:
+      - rede_ecormmerce
+    depends_on:
+      - service_discovery
+
+  order_service:
+    build: ./order-service
+    hostname: host_order_service
+    container_name: container_order_service
+    depends_on:
+      - service_discovery
+      - mongo_db_order_service
+    ports:
+      - "8081:8081"
+    restart: always
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      SPRING_DATA_MONGODB_HOST: host_mongo_db_order_service
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: order_db
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: 123
+    networks:
+      - rede_ecormmerce
+
+  product_service:
+    build: ./product-service
+    hostname: host_product_service
+    container_name: container_product_service
+    depends_on:
+      - service_discovery
+      - mongo_db_product_service
+    ports:
+      - "8082:8082"
+    restart: always
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      SPRING_DATA_MONGODB_HOST: host_mongo_db_product_service
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: product_db
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: 123
+    networks:
+      - rede_ecormmerce
+
+  notification_service:
+    build: ./notification-service
+    hostname: host_notification_service
+    container_name: container_notification_service
+    depends_on:
+      - service_discovery
+      - mongo_db_notification_service
+    ports:
+      - "8083:8083"
+    restart: always
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      SPRING_DATA_MONGODB_HOST: host_mongo_db_notification_service
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: notification_db
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: 123
+    networks:
+      - rede_ecormmerce
+
+  mongo_db_order_service:
+    image: mongo:8.0.4
+    hostname: host_mongo_db_order_service
+    container_name: container_mongo_db_order_service
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_DATABASE: order_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    volumes:
+      - .e-cormmerce/mongo_data/order:/data/db
+      - ./order-service/src/main/resources/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - rede_ecormmerce
+
+  mongo_db_product_service:
+    image: mongo:8.0.4
+    hostname: host_mongo_db_product_service
+    container_name: container_mongo_db_product_service
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: product_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    volumes:
+      - .e-cormmerce/mongo_data/product:/data/db
+      - ./product-service/src/main/resources/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - rede_ecormmerce
+
+  mongo_db_notification_service:
+    image: mongo:8.0.4
+    hostname: host_mongo_db_notification_service
+    container_name: container_mongo_db_notification_service
+    ports:
+      - "27019:27017"
+    environment:
+      MONGO_INITDB_DATABASE: notification_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    volumes:
+      - .e-cormmerce/mongo_data/notification:/data/db
+      - ./notification-service/src/main/resources/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    networks:
+      - rede_ecormmerce
+
+networks:
+  rede_ecormmerce:
+    driver: bridge
