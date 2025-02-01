@@ -47,6 +47,7 @@ services:
       SPRING_DATA_MONGODB_HOST: host_mongo_db_order_service
       SPRING_DATA_MONGODB_PORT: 27017
       SPRING_DATA_MONGODB_DATABASE: order_db
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
       SPRING_DATA_MONGODB_USERNAME: root
       SPRING_DATA_MONGODB_PASSWORD: 123
     networks:
@@ -66,11 +67,7 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
-      SPRING_DATA_MONGODB_HOST: host_mongo_db_product_service
-      SPRING_DATA_MONGODB_PORT: 27017
-      SPRING_DATA_MONGODB_DATABASE: product_db
-      SPRING_DATA_MONGODB_USERNAME: root
-      SPRING_DATA_MONGODB_PASSWORD: 123
+      SPRING_DATA_MONGODB_URI: mongodb://root:123@host_mongo_db_product_service:27017/product_db?authSource=admin
     networks:
       - rede_ecormmerce
 
@@ -91,6 +88,7 @@ services:
       SPRING_DATA_MONGODB_HOST: host_mongo_db_notification_service
       SPRING_DATA_MONGODB_PORT: 27017
       SPRING_DATA_MONGODB_DATABASE: notification_db
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
       SPRING_DATA_MONGODB_USERNAME: root
       SPRING_DATA_MONGODB_PASSWORD: 123
     networks:
