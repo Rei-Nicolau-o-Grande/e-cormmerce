@@ -23,7 +23,7 @@ public class ProductInfraGateway implements ProductGateway {
     }
 
     @Override
-    public Product getProductById(String id) {
+    public Product findProductById(String id) {
         return null;
     }
 
