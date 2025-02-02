@@ -2,6 +2,7 @@ package com.teste.product_service.infra.gateway;
 
 import com.teste.product_service.core.domain.entities.Product;
 import com.teste.product_service.core.gateway.ProductGateway;
+import com.teste.product_service.infra.exceptions.EntityNotFoundException;
 import com.teste.product_service.infra.mapper.ProductEntityMapper;
 import com.teste.product_service.infra.persistence.ProductEntity;
 import com.teste.product_service.infra.persistence.ProductRepository;
@@ -24,7 +25,11 @@ public class ProductInfraGateway implements ProductGateway {
 
     @Override
     public Product findProductById(String id) {
-        return null;
+        return productRepository.findById(id)
+                .map(ProductEntityMapper::toDomain)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Product not found")
+                );
     }
 
     @Override

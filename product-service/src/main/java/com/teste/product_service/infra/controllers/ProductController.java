@@ -2,6 +2,7 @@ package com.teste.product_service.infra.controllers;
 
 import com.teste.product_service.core.domain.entities.Product;
 import com.teste.product_service.core.usecase.CreateProductUseCase;
+import com.teste.product_service.core.usecase.FindProductByIdUseCase;
 import com.teste.product_service.infra.dtos.ProductRequestDto;
 import com.teste.product_service.infra.dtos.ProductResponseDto;
 import com.teste.product_service.infra.mapper.ProductDtoMapper;
@@ -16,9 +17,12 @@ import java.util.Map;
 public class ProductController {
 
     private final CreateProductUseCase createProductUseCase;
+    private final FindProductByIdUseCase findProductByIdUseCase;
 
-    public ProductController(CreateProductUseCase createProductUseCase) {
+    public ProductController(CreateProductUseCase createProductUseCase,
+                             FindProductByIdUseCase findProductByIdUseCase) {
         this.createProductUseCase = createProductUseCase;
+        this.findProductByIdUseCase = findProductByIdUseCase;
     }
 
     @PostMapping
@@ -26,6 +30,12 @@ public class ProductController {
         Product product = createProductUseCase.execute(ProductDtoMapper.toDomain(productRequestDto));
         URI locationProduct = URI.create(String.format("/api/v1/product/%s", product.id()));
         return ResponseEntity.created(locationProduct).body(ProductDtoMapper.toDtoResponse(product));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> findProductById(@PathVariable String id) {
+        Product product = findProductByIdUseCase.execute(id);
+        return ResponseEntity.ok(ProductDtoMapper.toDtoResponse(product));
     }
 
     @GetMapping("/test")
