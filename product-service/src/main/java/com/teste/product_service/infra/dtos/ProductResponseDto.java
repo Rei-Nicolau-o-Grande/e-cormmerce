@@ -1,6 +1,7 @@
 package com.teste.product_service.infra.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public record ProductResponseDto(
         LocalDateTime updatedAt,
 
         @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         LocalDateTime deactivatedAt,
 
         Boolean active

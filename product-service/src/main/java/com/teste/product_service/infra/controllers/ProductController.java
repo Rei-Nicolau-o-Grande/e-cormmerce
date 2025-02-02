@@ -2,6 +2,7 @@ package com.teste.product_service.infra.controllers;
 
 import com.teste.product_service.core.domain.entities.Product;
 import com.teste.product_service.core.usecase.CreateProductUseCase;
+import com.teste.product_service.core.usecase.DeactiveProductUseCase;
 import com.teste.product_service.core.usecase.FindProductByIdUseCase;
 import com.teste.product_service.infra.dtos.ProductRequestDto;
 import com.teste.product_service.infra.dtos.ProductResponseDto;
@@ -18,11 +19,14 @@ public class ProductController {
 
     private final CreateProductUseCase createProductUseCase;
     private final FindProductByIdUseCase findProductByIdUseCase;
+    private final DeactiveProductUseCase deactiveProductUseCase;
 
     public ProductController(CreateProductUseCase createProductUseCase,
-                             FindProductByIdUseCase findProductByIdUseCase) {
+                             FindProductByIdUseCase findProductByIdUseCase,
+                             DeactiveProductUseCase deactiveProductUseCase) {
         this.createProductUseCase = createProductUseCase;
         this.findProductByIdUseCase = findProductByIdUseCase;
+        this.deactiveProductUseCase = deactiveProductUseCase;
     }
 
     @PostMapping
@@ -35,6 +39,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> findProductById(@PathVariable String id) {
         Product product = findProductByIdUseCase.execute(id);
+        return ResponseEntity.ok(ProductDtoMapper.toDtoResponse(product));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ProductResponseDto> deactiveProduct(@PathVariable String id) {
+        Product product = deactiveProductUseCase.execute(id);
         return ResponseEntity.ok(ProductDtoMapper.toDtoResponse(product));
     }
 

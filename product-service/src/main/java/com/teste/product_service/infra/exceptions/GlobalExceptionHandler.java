@@ -25,4 +25,19 @@ public class GlobalExceptionHandler {
                 )
         );
     }
+
+    @ExceptionHandler(ProductIsAlreadyDeactivatedException.class)
+    public ResponseEntity<ErrorResponseDto> handleProductIsAlreadyDeactivatedException(HttpServletRequest request,
+                                                                                      ProductIsAlreadyDeactivatedException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponseDto(
+                        LocalDateTime.now(),
+                        request.getRequestURI(),
+                        request.getMethod(),
+                        HttpStatus.BAD_REQUEST.value(),
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        ex.getMessage()
+                )
+        );
+    }
 }
