@@ -6,6 +6,16 @@ spring:
     mongodb:
       uri: mongodb://root:123@localhost:27017/product_db?authSource=admin
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: product-group
+      auto-offset-reset: earliest
+    topic:
+      order-created: order-created
+      order-confirmed: order-confirmed
+      order-fail: order-fail
+
 server:
   port: 8082
 
