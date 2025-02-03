@@ -3,9 +3,11 @@ package com.teste.order_service.infra.persistence;
 import com.teste.order_service.core.domain.enums.StatusOrder;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class OrderMongoEventListener extends AbstractMongoEventListener<OrderEntity> {
 
     @Override

@@ -4,12 +4,7 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 27018
-      database: order_db
-      authentication-database: admin
-      username: root
-      password: 123
+      uri: mongodb://root:123@localhost:27018/order_db?authSource=admin
 
   kafka:
     bootstrap-servers: localhost:9092

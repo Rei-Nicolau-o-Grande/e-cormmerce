@@ -5,7 +5,9 @@ import com.teste.order_service.core.gateway.OrderGateway;
 import com.teste.order_service.infra.mapper.OrderEntityMapper;
 import com.teste.order_service.infra.persistence.OrderEntity;
 import com.teste.order_service.infra.persistence.OrderRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderInfraGateway implements OrderGateway {
 
     private final OrderRepository orderRepository;
