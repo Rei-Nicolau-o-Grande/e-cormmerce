@@ -1,5 +1,6 @@
 package com.teste.order_service.infra.config;
 
+import com.teste.order_service.infra.dtos.OrderResponseDto;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -36,7 +37,7 @@ public class KafkaConfig {
     private String orderFailTopic;
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public ProducerFactory<String, OrderResponseDto> producerFactory() {
         Map<String, Object> producerConfigs = new HashMap<>();
 
         producerConfigs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -48,7 +49,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public KafkaTemplate<String, OrderResponseDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
