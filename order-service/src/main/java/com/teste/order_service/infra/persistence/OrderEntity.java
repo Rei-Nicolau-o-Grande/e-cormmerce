@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Document(collection = "orders")
@@ -15,8 +16,8 @@ public class OrderEntity {
     @MongoId(targetType = FieldType.STRING)
     private String id;
 
-    @Field(targetType = FieldType.IMPLICIT)
-    private ProductItemEntity productItem;
+    @Field(targetType = FieldType.ARRAY)
+    private List<String> productsId;
 
     @Field(targetType = FieldType.STRING)
     private StatusOrder status;
@@ -30,9 +31,9 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(String id, ProductItemEntity productItem, StatusOrder status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public OrderEntity(String id, List<String> productsId, StatusOrder status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.productItem = productItem;
+        this.productsId = productsId;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -46,12 +47,12 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public ProductItemEntity getProductItem() {
-        return productItem;
+    public List<String> getProductsId() {
+        return productsId;
     }
 
-    public void setProductItem(ProductItemEntity productItem) {
-        this.productItem = productItem;
+    public void setProductsId(List<String> productsId) {
+        this.productsId = productsId;
     }
 
     public StatusOrder getStatus() {
@@ -82,19 +83,19 @@ public class OrderEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderEntity that = (OrderEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(productItem, that.productItem) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id) && Objects.equals(productsId, that.productsId) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productItem, status, createdAt, updatedAt);
+        return Objects.hash(id, productsId, status, createdAt, updatedAt);
     }
 
     @Override
     public String toString() {
         return "OrderEntity{" +
                 "id='" + id + '\'' +
-                ", productItem=" + productItem +
+                ", productsId=" + productsId +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

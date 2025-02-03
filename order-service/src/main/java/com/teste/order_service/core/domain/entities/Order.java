@@ -7,7 +7,7 @@ import java.util.List;
 
 public record Order(
         String id,
-        List<ProductItem> products,
+        List<String> productsId,
         StatusOrder status,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
