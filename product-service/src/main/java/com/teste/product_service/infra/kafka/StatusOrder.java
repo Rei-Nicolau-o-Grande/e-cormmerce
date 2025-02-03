@@ -1,4 +1,4 @@
-package com.teste.product_service.infra.consumer;
+package com.teste.product_service.infra.kafka;
 
 public enum StatusOrder {
     CREATED,

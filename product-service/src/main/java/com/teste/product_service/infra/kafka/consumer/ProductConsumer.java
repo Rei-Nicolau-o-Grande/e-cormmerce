@@ -1,5 +1,6 @@
-package com.teste.product_service.infra.consumer;
+package com.teste.product_service.infra.kafka.consumer;
 
+import com.teste.product_service.infra.kafka.OrderMessageConsumer;
 import com.teste.product_service.infra.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,8 @@ public class ProductConsumer {
     public void consumeOrderCreated(String message) {
         log.info("Order created receiver (String): {}", message);
 
-        OrderResponseConsumer orderResponseConsumer = jsonUtil.fromJson(message, OrderResponseConsumer.class);
+        OrderMessageConsumer orderMessageConsumer = jsonUtil.fromJson(message, OrderMessageConsumer.class);
 
-        log.info("Order created receiver (Object): {}", orderResponseConsumer);
+        log.info("Order created receiver (Object): {}", orderMessageConsumer);
     }
 }

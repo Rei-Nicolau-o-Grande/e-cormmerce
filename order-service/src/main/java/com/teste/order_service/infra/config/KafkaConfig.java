@@ -67,14 +67,4 @@ public class KafkaConfig {
         return createTopic(orderCreatedTopic);
     }
 
-    @Bean
-    public NewTopic orderConfirmedTopic() {
-        return createTopic(orderConfirmedTopic);
-    }
-
-    @Bean
-    public NewTopic orderCanceledTopic() {
-        return createTopic(orderFailTopic);
-    }
-
 }
