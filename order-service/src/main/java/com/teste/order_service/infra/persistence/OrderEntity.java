@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Document(collection = "orders")
@@ -21,15 +22,15 @@ public class OrderEntity {
     private StatusOrder status;
 
     @Field(targetType = FieldType.DATE_TIME)
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Field(targetType = FieldType.DATE_TIME)
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(String id, ProductItemEntity productItem, StatusOrder status, String createdAt, String updatedAt) {
+    public OrderEntity(String id, ProductItemEntity productItem, StatusOrder status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.productItem = productItem;
         this.status = status;
@@ -61,19 +62,19 @@ public class OrderEntity {
         this.status = status;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -95,8 +96,8 @@ public class OrderEntity {
                 "id='" + id + '\'' +
                 ", productItem=" + productItem +
                 ", status=" + status +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }
