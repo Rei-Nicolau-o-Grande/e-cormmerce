@@ -69,6 +69,12 @@ services:
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       SPRING_DATA_MONGODB_URI: mongodb://root:123@host_mongo_db_product_service:27017/product_db?authSource=admin
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: product-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_TOPIC_ORDER_CREATED: order-created
+      SPRING_KAFKA_TOPIC_ORDER_CONFIRMED: order-confirmed
+      SPRING_KAFKA_TOPIC_ORDER_FAIL: order-fail
     networks:
       - rede_ecormmerce
 

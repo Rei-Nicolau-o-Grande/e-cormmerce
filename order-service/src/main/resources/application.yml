@@ -16,7 +16,6 @@ spring:
       order-confirmed: order-confirmed
       order-fail: order-fail
 
-
 server:
   port: 8081
 
