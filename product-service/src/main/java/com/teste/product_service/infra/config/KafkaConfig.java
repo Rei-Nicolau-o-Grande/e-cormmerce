@@ -34,9 +34,6 @@ public class KafkaConfig {
     @Value("${spring.kafka.consumer.auto-offset-reset}")
     private String autoOffsetReset;
 
-    @Value("${spring.kafka.topic.order-created}")
-    private String orderCreatedTopic;
-
     @Value("${spring.kafka.topic.order-confirmed}")
     private String orderConfirmedTopic;
 
