@@ -6,7 +6,7 @@ import com.teste.order_service.infra.mapper.OrderDtoMapper;
 import com.teste.order_service.infra.mapper.OrderEntityMapper;
 import com.teste.order_service.infra.persistence.OrderEntity;
 import com.teste.order_service.infra.persistence.OrderRepository;
-import com.teste.order_service.infra.producer.OrderProducer;
+import com.teste.order_service.infra.kafka.producer.OrderProducer;
 import org.springframework.stereotype.Component;
 
 @Component

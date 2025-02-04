@@ -1,4 +1,4 @@
-package com.teste.order_service.infra.producer;
+package com.teste.order_service.infra.kafka.producer;
 
 import com.teste.order_service.infra.dtos.OrderResponseDto;
 import org.springframework.beans.factory.annotation.Value;
