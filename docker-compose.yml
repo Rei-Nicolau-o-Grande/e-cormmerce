@@ -92,12 +92,13 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
-      SPRING_DATA_MONGODB_HOST: host_mongo_db_notification_service
-      SPRING_DATA_MONGODB_PORT: 27017
-      SPRING_DATA_MONGODB_DATABASE: notification_db
-      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
-      SPRING_DATA_MONGODB_USERNAME: root
-      SPRING_DATA_MONGODB_PASSWORD: 123
+      SPRING_DATA_MONGODB_URI: mongodb://root:123@host_mongo_db_notification_service:27017/notification_db?authSource=admin
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: notification-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_TOPIC_ORDER_CREATED: order-created
+      SPRING_KAFKA_TOPIC_ORDER_CONFIRMED: order-confirmed
+      SPRING_KAFKA_TOPIC_ORDER_FAIL: order-fail
     networks:
       - rede_ecormmerce
 

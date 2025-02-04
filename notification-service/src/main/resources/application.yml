@@ -4,12 +4,17 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 27019
-      database: notification_db
-      authentication-database: admin
-      username: root
-      password: 123
+      uri: mongodb://root:123@localhost:27019/notification_db?authSource=admin
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+    topic:
+      order-created: order-created
+      order-confirmed: order-confirmed
+      order-fail: order-fail
 
 server:
   port: 8083
