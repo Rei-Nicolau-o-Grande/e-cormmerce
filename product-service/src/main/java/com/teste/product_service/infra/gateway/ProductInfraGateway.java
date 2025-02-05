@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -67,6 +68,16 @@ public class ProductInfraGateway implements ProductGateway {
                 })
                 .orElseThrow(
                         () -> new EntityNotFoundException("Product not found"));
+    }
+
+    @Override
+    public List<Product> findAllProductsActiveTrueAndStockGreaterThanZero() {
+        List<Product> products = productRepository.findAllByActiveTrueAndStockGreaterThan(0).stream()
+                .map(ProductEntityMapper::toDomain)
+                .toList();
+
+        log.info("Finding all products");
+        return products;
     }
 
     public void sendOrderTopicConfirmedOrFail(OrderMessageConsumer orderMessageConsumer) {

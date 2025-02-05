@@ -3,6 +3,7 @@ package com.teste.product_service.infra.controllers;
 import com.teste.product_service.core.domain.entities.Product;
 import com.teste.product_service.core.usecase.CreateProductUseCase;
 import com.teste.product_service.core.usecase.DeactiveProductUseCase;
+import com.teste.product_service.core.usecase.FindAllProductsByActiveTrueAndStockGreaterThanZeroUseCase;
 import com.teste.product_service.core.usecase.FindProductByIdUseCase;
 import com.teste.product_service.infra.dtos.ProductRequestDto;
 import com.teste.product_service.infra.dtos.ProductResponseDto;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,13 +26,16 @@ public class ProductController {
     private final CreateProductUseCase createProductUseCase;
     private final FindProductByIdUseCase findProductByIdUseCase;
     private final DeactiveProductUseCase deactiveProductUseCase;
+    private final FindAllProductsByActiveTrueAndStockGreaterThanZeroUseCase findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase;
 
     public ProductController(CreateProductUseCase createProductUseCase,
                              FindProductByIdUseCase findProductByIdUseCase,
-                             DeactiveProductUseCase deactiveProductUseCase) {
+                             DeactiveProductUseCase deactiveProductUseCase,
+                             FindAllProductsByActiveTrueAndStockGreaterThanZeroUseCase findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase) {
         this.createProductUseCase = createProductUseCase;
         this.findProductByIdUseCase = findProductByIdUseCase;
         this.deactiveProductUseCase = deactiveProductUseCase;
+        this.findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase = findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase;
     }
 
     @PostMapping
@@ -46,6 +51,13 @@ public class ProductController {
         Product product = findProductByIdUseCase.execute(id);
         log.info("Request received - Endpoint: GET /api/v1/product/{}", id);
         return ResponseEntity.ok(ProductDtoMapper.toDtoResponse(product));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ProductResponseDto>> findAllProductsActiveTrueFindAllProductsByActiveTrueAndStockGreaterThanZeroUseCase() {
+        List<Product> products = findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase.execute();
+        log.info("Request received - Endpoint: GET /api/v1/product");
+        return ResponseEntity.ok(products.stream().map(ProductDtoMapper::toDtoResponse).toList());
     }
 
     @DeleteMapping("/{id}")

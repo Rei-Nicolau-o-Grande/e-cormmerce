@@ -22,4 +22,9 @@ public class BeanConfig {
     public DeactiveProductUseCase deactiveProductUseCase(ProductGateway productGateway) {
         return new DeactiveProductUseCaseImpl(productGateway);
     }
+
+    @Bean
+    public FindAllProductsByActiveTrueAndStockGreaterThanZeroUseCase findAllProductsByActiveTrueAndStockGreaterThanZeroUseCase(ProductGateway productGateway) {
+        return new FindAllProductsByActiveTrueAndStockGreaterThanZeroUseCaseImpl(productGateway);
+    }
 }
