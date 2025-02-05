@@ -16,6 +16,18 @@ spring:
       order-confirmed: order-confirmed
       order-fail: order-fail
 
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    default-encoding: ${MAIL_DEFAULT_ENCODING}
+    protocol: ${MAIL_PROTOCOL}
+
+  config:
+    import: optional:file:../.env
+
+
 server:
   port: 8083
 
