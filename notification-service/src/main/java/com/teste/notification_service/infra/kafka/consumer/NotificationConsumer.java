@@ -1,6 +1,7 @@
 package com.teste.notification_service.infra.kafka.consumer;
 
 import com.teste.notification_service.infra.kafka.OrderMessageConsumer;
+import com.teste.notification_service.infra.utils.EmailService;
 import com.teste.notification_service.infra.utils.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,15 @@ public class NotificationConsumer {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationConsumer.class);
 
-    private final JsonUtil jsonUtil;
+    String emailTeste = "teste@teste.com";
 
-    public NotificationConsumer(JsonUtil jsonUtil) {
+    private final JsonUtil jsonUtil;
+    private final EmailService emailService;
+
+    public NotificationConsumer(JsonUtil jsonUtil,
+                                EmailService emailService) {
         this.jsonUtil = jsonUtil;
+        this.emailService = emailService;
     }
 
     @KafkaListener(
@@ -25,6 +31,13 @@ public class NotificationConsumer {
     public void consumeTopicOrderConfirmed(String message) {
         OrderMessageConsumer orderMessageConsumer = jsonUtil.fromJson(message, OrderMessageConsumer.class);
         log.info("(NOTIFICATION-SERVICE) Order confirmed: {}", orderMessageConsumer);
+        try {
+            emailService.sendEmail(emailTeste, orderMessageConsumer);
+            log.info("Email sent successfully status: {}", orderMessageConsumer.getStatus());
+        } catch (Exception e) {
+            log.error("Error sending email: {}", e.getMessage());
+        }
+
     }
 
     @KafkaListener(
@@ -34,5 +47,11 @@ public class NotificationConsumer {
     public void consumeTopicOrderFail(String message) {
         OrderMessageConsumer orderMessageConsumer = jsonUtil.fromJson(message, OrderMessageConsumer.class);
         log.info("(NOTIFICATION-SERVICE) Order fail: {}", orderMessageConsumer);
+        try {
+            emailService.sendEmail(emailTeste, orderMessageConsumer);
+            log.info("Email sent successfully status: {}", orderMessageConsumer.getStatus());
+        } catch (Exception e) {
+            log.error("Error sending email: {}", e.getMessage());
+        }
     }
 }

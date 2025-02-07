@@ -60,7 +60,7 @@ Os seguintes tópicos são utilizados para comunicação entre os microserviços
 
 Execute o build.py na raiz do projeto
 ```bash
-python3 build.py
+    python3 build.py
 ```
 ----------
 ## Considerações Finais

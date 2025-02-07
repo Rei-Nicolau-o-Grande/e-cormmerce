@@ -2,6 +2,9 @@ spring:
   application:
     name: notification-service
 
+  config:
+    import: optional:file:./.env[.properties]
+
   data:
     mongodb:
       uri: mongodb://root:123@localhost:27019/notification_db?authSource=admin
@@ -22,17 +25,12 @@ spring:
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}
     default-encoding: ${MAIL_DEFAULT_ENCODING}
-    protocol: ${MAIL_PROTOCOL}
     properties:
       mail:
         smtp:
           auth: ${MAIL_SMTP_AUTH}
           starttls:
             enable: ${MAIL_SMTP_STARTTLS_ENABLE}
-
-
-  config:
-    import: optional:file:../.env
 
 
 server:
