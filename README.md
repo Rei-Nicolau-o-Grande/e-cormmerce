@@ -56,6 +56,13 @@ Os seguintes tópicos são utilizados para comunicação entre os microserviços
 
 ----------
 
+## Subindo o Projeto
+
+Execute o build.py na raiz do projeto
+```bash
+python3 build.py
+```
+----------
 ## Considerações Finais
 
 -   O uso de **Kafka** garante um sistema altamente desacoplado e escalável.
