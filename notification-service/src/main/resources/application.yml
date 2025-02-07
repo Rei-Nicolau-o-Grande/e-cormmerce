@@ -23,6 +23,13 @@ spring:
     password: ${MAIL_PASSWORD}
     default-encoding: ${MAIL_DEFAULT_ENCODING}
     protocol: ${MAIL_PROTOCOL}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE}
+
 
   config:
     import: optional:file:../.env

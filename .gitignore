@@ -34,3 +34,4 @@ build/
 
 .e-cormmerce/
 .idea/
+.env
