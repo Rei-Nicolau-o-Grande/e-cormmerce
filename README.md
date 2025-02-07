@@ -56,7 +56,7 @@ Os seguintes tópicos são utilizados para comunicação entre os microserviços
 
 ----------
 
-## Subindo o Projeto
+## Rodando o Projeto
 
 Execute o build.py na raiz do projeto
 ```bash
