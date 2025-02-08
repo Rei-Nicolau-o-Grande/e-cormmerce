@@ -1,6 +1,7 @@
 package com.teste.product_service.infra.config;
 
 import com.teste.product_service.infra.kafka.OrderMessageConsumer;
+import com.teste.product_service.infra.kafka.OrderWithProductsMessageProducer;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -53,7 +54,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, OrderMessageConsumer> producerFactory() {
+    public ProducerFactory<String, OrderWithProductsMessageProducer> producerFactory() {
         Map<String, Object> producerConfigs = new HashMap<>();
 
         producerConfigs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
@@ -65,7 +66,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderMessageConsumer> kafkaTemplate() {
+    public KafkaTemplate<String, OrderWithProductsMessageProducer> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 

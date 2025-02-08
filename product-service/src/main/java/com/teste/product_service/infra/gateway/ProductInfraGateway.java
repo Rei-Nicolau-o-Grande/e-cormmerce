@@ -4,9 +4,6 @@ import com.teste.product_service.core.domain.entities.Product;
 import com.teste.product_service.core.gateway.ProductGateway;
 import com.teste.product_service.infra.exceptions.EntityNotFoundException;
 import com.teste.product_service.infra.exceptions.ProductIsAlreadyDeactivatedException;
-import com.teste.product_service.infra.kafka.OrderMessageConsumer;
-import com.teste.product_service.infra.kafka.StatusOrder;
-import com.teste.product_service.infra.kafka.producer.ProductProducer;
 import com.teste.product_service.infra.mapper.ProductEntityMapper;
 import com.teste.product_service.infra.persistence.ProductEntity;
 import com.teste.product_service.infra.persistence.ProductRepository;
@@ -16,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProductInfraGateway implements ProductGateway {
@@ -24,12 +20,9 @@ public class ProductInfraGateway implements ProductGateway {
     private static final Logger log = LoggerFactory.getLogger(ProductInfraGateway.class);
 
     private final ProductRepository productRepository;
-    private final ProductProducer productProducer;
 
-    public ProductInfraGateway(ProductRepository productRepository,
-                               ProductProducer productProducer) {
+    public ProductInfraGateway(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.productProducer = productProducer;
     }
 
     @Override
@@ -78,29 +71,5 @@ public class ProductInfraGateway implements ProductGateway {
 
         log.info("Finding all products");
         return products;
-    }
-
-    public void sendOrderTopicConfirmedOrFail(OrderMessageConsumer orderMessageConsumer) {
-        boolean hasUnavailableProduct = orderMessageConsumer.getProductsId().stream()
-                .map(productRepository::findById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .anyMatch(product -> !product.getActive() || product.getStock() <= 0);
-
-        if (hasUnavailableProduct) {
-            orderMessageConsumer.setStatus(StatusOrder.FAIL);
-            productProducer.sendOrderTopicFail(orderMessageConsumer);
-            log.info("Order sent to Topic: Order-Fail");
-        } else {
-            orderMessageConsumer.getProductsId().forEach(productId ->
-                    productRepository.findById(productId).ifPresent(product -> {
-                        product.setStock(product.getStock() - 1);
-                        productRepository.save(product);
-                    })
-            );
-            orderMessageConsumer.setStatus(StatusOrder.CONFIRMED);
-            productProducer.sendOrderTopicConfirmed(orderMessageConsumer);
-            log.info("Order sent to Topic: Order-Confirmed");
-        }
     }
 }
