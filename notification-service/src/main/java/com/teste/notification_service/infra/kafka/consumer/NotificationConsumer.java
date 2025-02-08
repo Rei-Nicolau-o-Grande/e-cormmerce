@@ -1,6 +1,6 @@
 package com.teste.notification_service.infra.kafka.consumer;
 
-import com.teste.notification_service.infra.kafka.OrderMessageConsumer;
+import com.teste.notification_service.infra.kafka.OrderWithProductsMessageConsumer;
 import com.teste.notification_service.infra.utils.EmailService;
 import com.teste.notification_service.infra.utils.JsonUtil;
 import org.slf4j.Logger;
@@ -29,11 +29,11 @@ public class NotificationConsumer {
             groupId = "${spring.kafka.consumer.group-id}"
     )
     public void consumeTopicOrderConfirmed(String message) {
-        OrderMessageConsumer orderMessageConsumer = jsonUtil.fromJson(message, OrderMessageConsumer.class);
-        log.info("(NOTIFICATION-SERVICE) Order confirmed: {}", orderMessageConsumer);
+        OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
+        log.info("(NOTIFICATION-SERVICE) Order confirmed: {}", orderWithProductsMessageConsumer.id());
         try {
-            emailService.sendEmail(emailTeste, orderMessageConsumer);
-            log.info("Email sent successfully status: {}", orderMessageConsumer.getStatus());
+            emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
+            log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
         } catch (Exception e) {
             log.error("Error sending email: {}", e.getMessage());
         }
@@ -45,11 +45,11 @@ public class NotificationConsumer {
             groupId = "${spring.kafka.consumer.group-id}"
     )
     public void consumeTopicOrderFail(String message) {
-        OrderMessageConsumer orderMessageConsumer = jsonUtil.fromJson(message, OrderMessageConsumer.class);
-        log.info("(NOTIFICATION-SERVICE) Order fail: {}", orderMessageConsumer);
+        OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
+        log.info("(NOTIFICATION-SERVICE) Order fail: {}", orderWithProductsMessageConsumer.id());
         try {
-            emailService.sendEmail(emailTeste, orderMessageConsumer);
-            log.info("Email sent successfully status: {}", orderMessageConsumer.getStatus());
+            emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
+            log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
         } catch (Exception e) {
             log.error("Error sending email: {}", e.getMessage());
         }

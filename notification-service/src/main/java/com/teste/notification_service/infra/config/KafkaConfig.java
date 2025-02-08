@@ -1,6 +1,6 @@
 package com.teste.notification_service.infra.config;
 
-import com.teste.notification_service.infra.kafka.OrderMessageConsumer;
+import com.teste.notification_service.infra.kafka.OrderWithProductsMessageConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class KafkaConfig {
     private String autoOffsetReset;
 
     @Bean
-    public ConsumerFactory<String, OrderMessageConsumer> consumerFactory() {
+    public ConsumerFactory<String, OrderWithProductsMessageConsumer> consumerFactory() {
         Map<String, Object> consumerConfigs = new HashMap<>();
         consumerConfigs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         consumerConfigs.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
