@@ -1,6 +1,5 @@
 package com.teste.product_service.infra.kafka.consumer;
 
-import com.teste.product_service.infra.gateway.ProductInfraGateway;
 import com.teste.product_service.infra.kafka.OrderMessageConsumer;
 import com.teste.product_service.infra.utils.JsonUtil;
 import com.teste.product_service.infra.utils.SendOrderTopic;

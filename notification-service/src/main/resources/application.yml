@@ -3,11 +3,7 @@ spring:
     name: notification-service
 
   config:
-    import: optional:file:./.env[.properties]
-
-  data:
-    mongodb:
-      uri: mongodb://root:123@localhost:27019/notification_db?authSource=admin
+    import: optional:file:.env[.properties]
 
   kafka:
     bootstrap-servers: localhost:9092

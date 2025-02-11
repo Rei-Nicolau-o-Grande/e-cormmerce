@@ -84,7 +84,6 @@ services:
     container_name: container_notification_service
     depends_on:
       - service_discovery
-      - mongo_db_notification_service
     ports:
       - "8083:8083"
     restart: always
@@ -92,15 +91,42 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
-      SPRING_DATA_MONGODB_URI: mongodb://root:123@host_mongo_db_notification_service:27017/notification_db?authSource=admin
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       SPRING_KAFKA_CONSUMER_GROUP_ID: notification-group
       SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
       SPRING_KAFKA_TOPIC_ORDER_CREATED: order-created
       SPRING_KAFKA_TOPIC_ORDER_CONFIRMED: order-confirmed
       SPRING_KAFKA_TOPIC_ORDER_FAIL: order-fail
+      SPRING_KAFKA_TOPIC_ORDER_PDF: order-pdf
+    env_file:
+      - notification-service/.env
     networks:
       - rede_ecormmerce
+
+  pdf_service:
+    build: ./pdf-service
+    hostname: host_pdf_service
+    container_name: container_pdf_service
+    depends_on:
+      - service_discovery
+    ports:
+      - "8084:8084"
+    restart: always
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host-service-discovery:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: pdf-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_TOPIC_ORDER_CREATED: order-created
+      SPRING_KAFKA_TOPIC_ORDER_CONFIRMED: order-confirmed
+      SPRING_KAFKA_TOPIC_ORDER_FAIL: order-fail
+      SPRING_KAFKA_TOPIC_ORDER_PDF: order-pdf
+    networks:
+      - rede_ecormmerce
+    volumes:
+      - .e-cormmerce/orders
 
   mongo_db_order_service:
     image: mongo:8.0.4
@@ -131,22 +157,6 @@ services:
     volumes:
       - .e-cormmerce/mongo_data/product:/data/db
       - ./product-service/src/main/resources/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
-    networks:
-      - rede_ecormmerce
-
-  mongo_db_notification_service:
-    image: mongo:8.0.4
-    hostname: host_mongo_db_notification_service
-    container_name: container_mongo_db_notification_service
-    ports:
-      - "27019:27017"
-    environment:
-      MONGO_INITDB_DATABASE: notification_db
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 123
-    volumes:
-      - .e-cormmerce/mongo_data/notification:/data/db
-      - ./notification-service/src/main/resources/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
     networks:
       - rede_ecormmerce
 

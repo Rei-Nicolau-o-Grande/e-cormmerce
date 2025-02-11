@@ -8,6 +8,7 @@ SERVICES_ORDER = [
     'product-service',
     'order-service',
     'notification-service',
+    'pdf-service',
 ]
 
 # Função para parar e remover todos os containers
@@ -60,7 +61,8 @@ def delete_mongo_data():
     print("Deletando dados do .e-cormmerce...")
     os.system("sudo chmod -R 777 .e-cormmerce")
     os.system("rm -rf .e-cormmerce")
-    print("Dados do Escola deletados.")
+    os.system("rm -rf orders")
+    print("Dados do e-cormmerce deletados.")
 
 def ask_confirmation(prompt):
     """Solicita confirmação do usuário para continuar com uma etapa."""
