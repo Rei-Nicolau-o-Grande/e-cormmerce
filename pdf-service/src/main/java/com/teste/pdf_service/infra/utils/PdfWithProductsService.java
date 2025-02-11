@@ -1,6 +1,6 @@
 package com.teste.pdf_service.infra.utils;
 
-import com.teste.pdf_service.infra.kafka.OrderMessageConsumer;
+import com.teste.pdf_service.infra.kafka.OrderWithProductsMessageProducer;
 import com.teste.pdf_service.infra.kafka.producer.PdfProducer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -18,17 +18,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Component
-public class PdfService {
+public class PdfWithProductsService {
 
-    private static final Logger log = LoggerFactory.getLogger(PdfService.class);
+    private static final Logger log = LoggerFactory.getLogger(PdfWithProductsService.class);
 
     private final PdfProducer pdfProducer;
 
-    public PdfService(PdfProducer pdfProducer) {
+    public PdfWithProductsService(PdfProducer pdfProducer) {
         this.pdfProducer = pdfProducer;
     }
 
-    public void generatePdf(OrderMessageConsumer orderMessageConsumer) {
+    public void generatePdf(OrderWithProductsMessageProducer orderMessageConsumer) {
         try (PDDocument document = new PDDocument()) {
             // Cria uma nova página no modo retrato (A4)
             PDPage page = new PDPage(PDRectangle.A4);
@@ -44,18 +44,30 @@ public class PdfService {
 //                drawBorders(contentStream, page);
 
                 // Adiciona o cabeçalho e obtém a posição y final
-                float titleEndY = addHeader(contentStream, page, font, "Order " + orderMessageConsumer.getStatus());
+                float titleEndY = addHeader(contentStream, page, font, "Order " + orderMessageConsumer.status());
 
                 String dataTimeContent = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
                 String textContent = String.format("Order status: %s - Date: %s",
-                        orderMessageConsumer.getStatus(), dataTimeContent);
-
+                        orderMessageConsumer.status(), dataTimeContent);
 
                 // Adiciona o conteúdo principal logo abaixo do título
                 float contentStartY = titleEndY - 20; // 20 pontos de margem entre o título e o conteúdo
                 float contentEndY = addContent(contentStream, fontRegular, String.format(textContent), contentStartY);
 
+                // Colunas da tabela
+                String[] columns = new String[]{"Produto", "Preço"};
+
+                // Adiciona uma tabela abaixo do conteúdo
+                String[][] data = orderMessageConsumer.products().stream()
+                        .map(product -> new String[]{product.name(), String.valueOf(product.price())})
+                        .toArray(String[][]::new);
+
+                float tableStartY = contentEndY - 20; // 20 pontos de margem entre o conteúdo e a tabela
+                addTable(document, contentStream, page, fontRegular, data, tableStartY);
+
+                // Adiciona o rodapé na primeira página
+                addFooter(contentStream, page, font, "Página 1");
             }
 
             // Verifica se o diretório "orders" existe; se não, cria o diretório
@@ -68,9 +80,9 @@ public class PdfService {
             }
 
             // Salva o documento em um arquivo
-            String nameOrderPdf = String.format("order-%s-%s.pdf", orderMessageConsumer.getStatus(), orderMessageConsumer.getId());
+            String nameOrderPdf = String.format("order-%s-%s.pdf", orderMessageConsumer.status(), orderMessageConsumer.id());
             document.save("orders/" + nameOrderPdf);
-            pdfProducer.sendOrderPdfTopicCreated(orderMessageConsumer);
+            pdfProducer.sendOrderPdfTopicConfirmedAndFail(orderMessageConsumer);
             log.info("Local do arquivo PDF: orders/{}", nameOrderPdf);
             log.info("PDF criado com sucesso!");
         } catch (IOException e) {

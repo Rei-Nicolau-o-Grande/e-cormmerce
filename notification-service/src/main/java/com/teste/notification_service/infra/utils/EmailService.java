@@ -29,14 +29,14 @@ public class EmailService {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-            String subject = "Notification of your order has arrived";
+            String subject = "Notification of your order has arrived. Status: " + messageConsumer.status();
 
             helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(bodyHtml(messageConsumer), true);
 
             String nameOrderPdf = String.format("order-%s-%s.pdf", messageConsumer.status(), messageConsumer.id());
-            Path filePath = Paths.get("/orders", nameOrderPdf);
+            Path filePath = Paths.get("orders/" + nameOrderPdf);
             File file = filePath.toFile();
             if (!file.exists()) {
                 throw new FileNotFoundException("Arquivo não encontrado: " + file.getAbsolutePath());

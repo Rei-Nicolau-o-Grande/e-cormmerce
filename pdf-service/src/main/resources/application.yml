@@ -2,9 +2,19 @@ spring:
   application:
     name: pdf-service
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: pdf-group
+      auto-offset-reset: earliest
+    topic:
+      order-created: order-created
+      order-confirmed: order-confirmed
+      order-fail: order-fail
+      order-pdf: order-pdf
+
 server:
   port: 8084
-
 
 eureka:
   client:

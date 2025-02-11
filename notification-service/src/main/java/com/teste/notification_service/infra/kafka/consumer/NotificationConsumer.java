@@ -25,28 +25,12 @@ public class NotificationConsumer {
     }
 
     @KafkaListener(
-            topics = "${spring.kafka.topic.order-confirmed}",
+            topics = "${spring.kafka.topic.order-pdf}",
             groupId = "${spring.kafka.consumer.group-id}"
     )
-    public void consumeTopicOrderConfirmed(String message) {
+    public void consumeTopicOrderPdf(String message) {
         OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
-        log.info("(NOTIFICATION-SERVICE) Order confirmed: {}", orderWithProductsMessageConsumer.id());
-        try {
-            emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
-            log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
-        } catch (Exception e) {
-            log.error("Error sending email: {}", e.getMessage());
-        }
-
-    }
-
-    @KafkaListener(
-            topics = "${spring.kafka.topic.order-fail}",
-            groupId = "${spring.kafka.consumer.group-id}"
-    )
-    public void consumeTopicOrderFail(String message) {
-        OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
-        log.info("(NOTIFICATION-SERVICE) Order fail: {}", orderWithProductsMessageConsumer.id());
+        log.info("(NOTIFICATION-SERVICE) Order pdf: {}", orderWithProductsMessageConsumer.id());
         try {
             emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
             log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
@@ -54,4 +38,35 @@ public class NotificationConsumer {
             log.error("Error sending email: {}", e.getMessage());
         }
     }
+
+//    @KafkaListener(
+//            topics = "${spring.kafka.topic.order-confirmed}",
+//            groupId = "${spring.kafka.consumer.group-id}"
+//    )
+//    public void consumeTopicOrderConfirmed(String message) {
+//        OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
+//        log.info("(NOTIFICATION-SERVICE) Order confirmed: {}", orderWithProductsMessageConsumer.id());
+//        try {
+//            emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
+//            log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
+//        } catch (Exception e) {
+//            log.error("Error sending email: {}", e.getMessage());
+//        }
+//
+//    }
+//
+//    @KafkaListener(
+//            topics = "${spring.kafka.topic.order-fail}",
+//            groupId = "${spring.kafka.consumer.group-id}"
+//    )
+//    public void consumeTopicOrderFail(String message) {
+//        OrderWithProductsMessageConsumer orderWithProductsMessageConsumer = jsonUtil.fromJson(message, OrderWithProductsMessageConsumer.class);
+//        log.info("(NOTIFICATION-SERVICE) Order fail: {}", orderWithProductsMessageConsumer.id());
+//        try {
+//            emailService.sendEmail(emailTeste, orderWithProductsMessageConsumer);
+//            log.info("Email sent successfully status: {}", orderWithProductsMessageConsumer.status());
+//        } catch (Exception e) {
+//            log.error("Error sending email: {}", e.getMessage());
+//        }
+//    }
 }
